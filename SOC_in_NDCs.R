@@ -5,15 +5,24 @@ install.packages("pdftools")
 install.packages("dplyr")
 library("dplyr")
 library("rvest")
+library(V8)
+
 ##create a .txt dataset from pdf file using cabo verde to illustrate
 text<-("Cabo_Verde_INDC_.pdf")
 text_input<-rvest::read_html("https://www4.unfccc.int/sites/ndcstaging/PublishedDocuments/Cabo%20Verde%20First/Cabo_Verde_INDC_.pdf")
 text_input2<-rvest::read_html("https://www4.unfccc.int/sites/NDCStaging/Pages/All.aspx")
 
-library(V8)
+text_script<-text_input2 %>%
+  html_node ("script type=") %>% 
+  html_text ()
+
 text_script2<-text_input2 %>%
-  html_nodes("link") %>% 
+  html_nodes("href") %>% 
+  html_nodes("https://www4.unfccc.int/sites/ndcstaging/PublishedDocuments/Cabo%20Verde%20First/Cabo%20Verde_NDC%20Update%202021.pdf")
   html_text()
+
+<a target="_blank" href="https://www4.unfccc.int/sites/ndcstaging/PublishedDocuments/Cabo%20Verde%20First/Cabo%20Verde_NDC%20Update%202021.pdf"><i class="fa fa-file-text"></i>&nbsp;&nbsp;																			Cabo Verde First NDC(Updated submission)																																					</a>
+
 
 text<-pdftools::pdf_text(text_script2) #extract text from pdf
 length(text)  ##check length of file
