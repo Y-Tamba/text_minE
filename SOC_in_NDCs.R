@@ -2,11 +2,20 @@ install.packages("textmineR")
 install.packages("readPDF")
 install.packages("tm")
 install.packages("pdftools")
-
-
+install.packages("dplyr")
+library("dplyr")
+library("rvest")
 ##create a .txt dataset from pdf file using cabo verde to illustrate
-text<-"Cabo_verde_INDC_.pdf"
-text<-pdftools::pdf_text(text) #extract text from pdf
+text<-("Cabo_Verde_INDC_.pdf")
+text_input<-rvest::read_html("https://www4.unfccc.int/sites/ndcstaging/PublishedDocuments/Cabo%20Verde%20First/Cabo_Verde_INDC_.pdf")
+text_input2<-rvest::read_html("https://www4.unfccc.int/sites/NDCStaging/Pages/All.aspx")
+
+library(V8)
+text_script2<-text_input2 %>%
+  html_nodes("link") %>% 
+  html_text()
+
+text<-pdftools::pdf_text(text_script2) #extract text from pdf
 length(text)  ##check length of file
 text_dt<-write.table(text,file=paste("Cabo_verde_INDC",sep="."), 
  quote = FALSE, row.names = FALSE, col.names = FALSE, eol = " " )
