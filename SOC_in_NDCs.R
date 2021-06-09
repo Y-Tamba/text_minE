@@ -17,11 +17,12 @@ text_script<-text_input2 %>%
   html_text ()
 
 text_script2<-text_input2 %>%
-  html_nodes("href") %>% 
-  html_nodes("https://www4.unfccc.int/sites/ndcstaging/PublishedDocuments/Cabo%20Verde%20First/Cabo%20Verde_NDC%20Update%202021.pdf")
+  #html_nodes(".href") %>% 
+  html_nodes(xpath='//div/a[contains(@href,"https")]') %>%
+             #"https://www4.unfccc.int/sites/ndcstaging/PublishedDocuments/Cabo%20Verde%20First/Cabo%20Verde_NDC%20Update%202021.pdf") %>%
   html_text()
 
-<a target="_blank" href="https://www4.unfccc.int/sites/ndcstaging/PublishedDocuments/Cabo%20Verde%20First/Cabo%20Verde_NDC%20Update%202021.pdf"><i class="fa fa-file-text"></i>&nbsp;&nbsp;																			Cabo Verde First NDC(Updated submission)																																					</a>
+  xpath='//td/a[contains(@href,"javascript")]'
 
 
 text<-pdftools::pdf_text(text_script2) #extract text from pdf
