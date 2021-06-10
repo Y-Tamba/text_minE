@@ -9,7 +9,20 @@ library(V8)
 library("xml2")
 ##create a .txt dataset from pdf file using cabo verde to illustrate
 text<-("Cabo_Verde_INDC_.pdf")
-text_input<-rvest::read_html("https://www4.unfccc.int/sites/ndcstaging/PublishedDocuments/Cabo%20Verde%20First/Cabo_Verde_INDC_.pdf")
+
+
+##css selector individual page 
+text_input<-rvest::read_html("https://www.geeksforgeeks.org/css-links/")
+script<-xml_attrs(xml_child(xml_child(text_input, 1), 19))[["href"]]
+text_script2<-text_input %>%
+  xml_attrs(xml_child(xml_child(text_input, 1), 19))[["href"]] %>% 
+  html_text()
+
+text_script3<-text_input %>%
+  xml_attrs(xml_child(xml_child(xml_child(text_input2, 2), 1), 1))[["src"]] %>% 
+  html_text()
+
+text<-xml_attrs(xml_child(xml_child(xml_child(xml_child(xml_child(xml_child(xml_child(text_input, 2), 2), 2), 1), 2), 6), 1))
 
 ##css selector all pages 
 text_input2<-rvest::read_html("https://www4.unfccc.int/sites/NDCStaging/Pages/All.aspx")
