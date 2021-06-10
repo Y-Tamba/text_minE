@@ -6,23 +6,26 @@ install.packages("dplyr")
 library("dplyr")
 library("rvest")
 library(V8)
-
+library("xml2")
 ##create a .txt dataset from pdf file using cabo verde to illustrate
 text<-("Cabo_Verde_INDC_.pdf")
 text_input<-rvest::read_html("https://www4.unfccc.int/sites/ndcstaging/PublishedDocuments/Cabo%20Verde%20First/Cabo_Verde_INDC_.pdf")
+
+##css selector all pages 
 text_input2<-rvest::read_html("https://www4.unfccc.int/sites/NDCStaging/Pages/All.aspx")
 
 text_script<-text_input2 %>%
-  html_node ("script type=") %>% 
+  html_node ("col-sm-2") %>% 
   html_text ()
 
 text_script2<-text_input2 %>%
-  #html_nodes(".href") %>% 
-  html_nodes(xpath='//div/a[contains(@href,"https")]') %>%
-             #"https://www4.unfccc.int/sites/ndcstaging/PublishedDocuments/Cabo%20Verde%20First/Cabo%20Verde_NDC%20Update%202021.pdf") %>%
+ xml_attrs(xml_child(xml_child(text_input2, 2), 4))[["href"]] %>% 
   html_text()
 
-  xpath='//td/a[contains(@href,"javascript")]'
+text_script3<-text_input2 %>%
+  xml_attrs(xml_child(xml_child(xml_child(text_input2, 2), 1), 1))[["src"]] %>% 
+  html_text()
+  
 
 
 text<-pdftools::pdf_text(text_script2) #extract text from pdf
