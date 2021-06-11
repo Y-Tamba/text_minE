@@ -5,46 +5,22 @@ install.packages("pdftools")
 install.packages("dplyr")
 library("dplyr")
 library("rvest")
-library(V8)
+library("V8")
 library("xml2")
+library("pdftools")
+
 ##create a .txt dataset from pdf file using cabo verde to illustrate
-text<-("Cabo_Verde_INDC_.pdf")
+list_files<-list.files(pattern=".pdf")
+read_texts<-lapply(list_files,pdf_text)
 
-
-##css selector individual page 
-text_input<-rvest::read_html("https://www.geeksforgeeks.org/css-links/")
-script<-xml_attrs(xml_child(xml_child(text_input, 1), 19))[["href"]]
-text_script2<-text_input %>%
-  xml_attrs(xml_child(xml_child(text_input, 1), 19))[["href"]] %>% 
-  html_text()
-
-text_script3<-text_input %>%
-  xml_attrs(xml_child(xml_child(xml_child(text_input2, 2), 1), 1))[["src"]] %>% 
-  html_text()
-
-text<-xml_attrs(xml_child(xml_child(xml_child(xml_child(xml_child(xml_child(xml_child(text_input, 2), 2), 2), 1), 2), 6), 1))
-
-##css selector all pages 
-text_input2<-rvest::read_html("https://www4.unfccc.int/sites/NDCStaging/Pages/All.aspx")
-
-text_script<-text_input2 %>%
-  html_node ("col-sm-2") %>% 
-  html_text ()
-
-text_script2<-text_input2 %>%
- xml_attrs(xml_child(xml_child(text_input2, 2), 4))[["href"]] %>% 
-  html_text()
-
-text_script3<-text_input2 %>%
-  xml_attrs(xml_child(xml_child(xml_child(text_input2, 2), 1), 1))[["src"]] %>% 
-  html_text()
-  
-
-
-text<-pdftools::pdf_text(text_script2) #extract text from pdf
-length(text)  ##check length of file
+id<-c("cabo", "Chile", "Canada", "chad", "centra")
+texts_dt<-1:length(read_texts)
+texts_dt<- for (i in read_texts) 
+ {write.table(i, file = paste(id, sep = ""),quote = FALSE, 
+              row.names = FALSE, col.names = FALSE, eol = "\n" )} 
+ 
 text_dt<-write.table(text,file=paste("Cabo_verde_INDC",sep="."), 
- quote = FALSE, row.names = FALSE, col.names = FALSE, eol = " " )
+quote = FALSE, row.names = FALSE, col.names = FALSE, eol = " " )
 
 caboVerde_NDC<-textmineR::CreateDtm(doc_vec=text, 
                               doc_names = NULL,
